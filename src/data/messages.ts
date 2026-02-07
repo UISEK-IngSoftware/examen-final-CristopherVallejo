@@ -1,62 +1,56 @@
+import axios from 'axios';
+
+// Interfaz para el Personaje de Futurama
 export interface Message {
-  fromName: string;
-  subject: string;
-  date: string;
   id: number;
+  name: string;
+  gender: string;
+  status: string;
+  species: string;
+  createdAt: string;
+  image: string;
 }
 
-const messages: Message[] = [
-  {
-    fromName: 'Matt Chorsey',
-    subject: 'New event: Trip to Vegas',
-    date: '9:32 AM',
-    id: 0
-  },
-  {
-    fromName: 'Lauren Ruthford',
-    subject: 'Long time no chat',
-    date: '6:12 AM',
-    id: 1
-  },
-  {
-    fromName: 'Jordan Firth',
-    subject: 'Report Results',
-    date: '4:55 AM',
-    id: 2
+// Interfaz para la respuesta de la API
+interface ApiResponse {
+  items: Message[];
+}
 
-  },
-  {
-    fromName: 'Bill Thomas',
-    subject: 'The situation',
-    date: 'Yesterday',
-    id: 3
-  },
-  {
-    fromName: 'Joanne Pollan',
-    subject: 'Updated invitation: Swim lessons',
-    date: 'Yesterday',
-    id: 4
-  },
-  {
-    fromName: 'Andrea Cornerston',
-    subject: 'Last minute ask',
-    date: 'Yesterday',
-    id: 5
-  },
-  {
-    fromName: 'Moe Chamont',
-    subject: 'Family Calendar - Version 1',
-    date: 'Last Week',
-    id: 6
-  },
-  {
-    fromName: 'Kelly Richardson',
-    subject: 'Placeholder Headhots',
-    date: 'Last Week',
-    id: 7
+// URL base de la API
+const API_URL = 'https://futuramaapi.com/api/characters';
+
+/**
+ * Obtiene los personajes de Futurama desde la API
+ * @returns Promise con el array de personajes
+ */
+export const getMessages = async (): Promise<Message[]> => {
+  try {
+    const response = await axios.get<ApiResponse>(API_URL, {
+      params: {
+        orderBy: 'id',
+        orderByDirection: 'asc',
+        page: 1,
+        size: 50
+      }
+    });
+    return response.data.items;
+  } catch (error) {
+    console.error('Error al obtener los personajes:', error);
+    throw error;
   }
-];
+};
 
-export const getMessages = () => messages;
-
-export const getMessage = (id: number) => messages.find(m => m.id === id);
+/**
+ * Obtiene un personaje específico por ID
+ * @param id - ID del personaje
+ * @returns El personaje encontrado o undefined
+ */
+export const getMessage = async (id: number): Promise<Message | undefined> => {
+  try {
+    const messages = await getMessages();
+    return messages.find(m => m.id === id);
+  } catch (error) {
+    console.error('Error al obtener el personaje:', error);
+    throw error;
+  }
+};

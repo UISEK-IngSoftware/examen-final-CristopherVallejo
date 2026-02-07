@@ -1,64 +1,60 @@
 #message-list-item {
   --padding-start: 0;
   --inner-padding-end: 0;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-#message-list-item ion-label {
-  margin-top: 12px;
-  margin-bottom: 12px;
-
+/* Avatar del personaje */
+#message-list-item .character-avatar {
+  width: 60px;
+  height: 60px;
+  margin-right: 12px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
-#message-list-item ion-label h2 {
-  font-weight: 600;
+#message-list-item .character-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Información del personaje */
+#message-list-item ion-label {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+#message-list-item .character-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+  color: #222;
+}
+
+#message-list-item .character-info {
   margin: 0;
-
-  /**
-   * With larger font scales
-   * the date/time should wrap to the next
-   * line. However, there should be
-   * space between the name and the date/time
-   * if they can appear on the same line.
-   */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
 
-#message-list-item p {
-  white-space: nowrap;
-  width: 95%;
+#message-list-item .character-info p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #666;
 }
 
-#message-list-item .date {
-  align-items: center;
-  display: flex;
+/* Badge de estado */
+#message-list-item .status-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-#message-list-item ion-icon {
-  color: #c9c9ca;
+/* Hover effect */
+#message-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
 }
 
-#message-list-item ion-note {
-  font-size: 0.9375rem;
-  margin-right: 8px;
-  font-weight: normal;
-}
-
-#message-list-item ion-note.md {
-  margin-right: 14px;
-}
-
-#message-list-item .dot {
-  display: block;
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  align-self: start;
-  margin: 16px 10px 16px 16px;
-}
-
-#message-list-item .dot-unread {
-  background: var(--ion-color-primary);
-}

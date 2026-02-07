@@ -12,6 +12,12 @@ import {
   IonPage,
   IonToolbar,
   useIonViewWillEnter,
+  IonLoading,
+  IonCard,
+  IonCardContent,
+  IonText,
+  IonBadge,
+  IonAvatar,
 } from '@ionic/react';
 import { personCircle } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -19,11 +25,35 @@ import './ViewMessage.css';
 
 function ViewMessage() {
   const [message, setMessage] = useState<Message>();
+  const [loading, setLoading] = useState(true);
   const params = useParams<{ id: string }>();
 
+  /**
+   * Obtiene el color del badge según el estado
+   */
+  const getStatusColor = (status: string): string => {
+    switch (status.toUpperCase()) {
+      case 'ALIVE':
+        return 'success';
+      case 'DEAD':
+        return 'danger';
+      default:
+        return 'medium';
+    }
+  };
+
   useIonViewWillEnter(() => {
-    const msg = getMessage(parseInt(params.id, 10));
-    setMessage(msg);
+    setLoading(true);
+    getMessage(parseInt(params.id, 10))
+      .then((msg) => {
+        setMessage(msg);
+      })
+      .catch((error) => {
+        console.error('Error al cargar el personaje:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   });
 
   return (
@@ -31,44 +61,83 @@ function ViewMessage() {
       <IonHeader translucent>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton text="Inbox" defaultHref="/home"></IonBackButton>
+            <IonBackButton text="Personajes" defaultHref="/home"></IonBackButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
+        <IonLoading isOpen={loading} message="Cargando..." />
+        
         {message ? (
           <>
+            {/* Imagen del personaje */}
+            <div className="character-header">
+              <IonAvatar className="large-avatar">
+                <img src={message.image} alt={message.name} />
+              </IonAvatar>
+            </div>
+
+            {/* Información principal */}
             <IonItem>
-              <IonIcon aria-hidden="true" icon={personCircle} color="primary"></IonIcon>
               <IonLabel className="ion-text-wrap">
-                <h2>
-                  {message.fromName}
-                  <span className="date">
-                    <IonNote>{message.date}</IonNote>
-                  </span>
+                <h2 className="character-title">
+                  {message.name}
                 </h2>
-                <h3>
-                  To: <IonNote>Me</IonNote>
-                </h3>
+                <p>
+                  <strong>Especie:</strong> {message.species}
+                </p>
+                <p>
+                  <strong>Género:</strong> {message.gender}
+                </p>
               </IonLabel>
             </IonItem>
 
+            {/* Estado */}
             <div className="ion-padding">
-              <h1>{message.subject}</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <IonBadge 
+                color={getStatusColor(message.status)}
+                className="large-badge"
+              >
+                Estado: {message.status}
+              </IonBadge>
+              <p className="created-date">
+                <strong>Agregado:</strong> {new Date(message.createdAt).toLocaleDateString()}
               </p>
             </div>
+
+            {/* Descripción */}
+            <IonCard>
+              <IonCardContent>
+                <h3>Detalles del Personaje</h3>
+                <p>
+                  <strong>ID:</strong> {message.id}
+                </p>
+                <p>
+                  <strong>Nombre:</strong> {message.name}
+                </p>
+                <p>
+                  <strong>Especie:</strong> {message.species}
+                </p>
+                <p>
+                  <strong>Género:</strong> {message.gender}
+                </p>
+                <p>
+                  <strong>Estado Vital:</strong> {message.status}
+                </p>
+              </IonCardContent>
+            </IonCard>
           </>
         ) : (
-          <div>Message not found</div>
+          !loading && (
+            <IonCard className="error-card">
+              <IonCardContent>
+                <IonText>
+                  <h2>❌ Personaje no encontrado</h2>
+                </IonText>
+              </IonCardContent>
+            </IonCard>
+          )
         )}
       </IonContent>
     </IonPage>

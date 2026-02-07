@@ -2,7 +2,9 @@
 # Examen Final - Aplicación Ionic Futurama
 
 ## Datos del estudiantes
-- Nombre: ______________________
+- Nombre: Vallejo Cristopher
+ Fecha: 06-02-2026
+ Carrera : Ing. Software 
 
 ## 📋 Objetivo
 

@@ -10,30 +10,54 @@ import {
   IonRefresherContent,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter
+  useIonViewWillEnter,
+  IonLoading,
+  IonText,
+  IonCard,
+  IonCardContent
 } from '@ionic/react';
 import './Home.css';
 
 const Home: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  /**
+   * Carga los personajes desde la API
+   */
+  const loadMessages = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const msgs = await getMessages();
+      setMessages(msgs);
+    } catch (err) {
+      setError('Error al cargar los personajes. Por favor, intenta de nuevo.');
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
+    loadMessages();
   });
 
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
+  /**
+   * Maneja el refresh (deslizar hacia abajo)
+   */
+  const refresh = async (e: CustomEvent) => {
+    await loadMessages();
+    e.detail.complete();
   };
 
   return (
     <IonPage id="home-page">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
+          <IonTitle>Personajes Futurama</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -44,14 +68,42 @@ const Home: React.FC = () => {
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">
-              Inbox
+              Personajes Futurama
             </IonTitle>
           </IonToolbar>
         </IonHeader>
 
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
+        {/* Loading */}
+        <IonLoading isOpen={loading} message="Cargando personajes..." />
+
+        {/* Error State */}
+        {error && !loading && (
+          <IonCard className="error-card">
+            <IonCardContent>
+              <IonText>
+                <h2>❌ {error}</h2>
+              </IonText>
+            </IonCardContent>
+          </IonCard>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && messages.length === 0 && (
+          <IonCard className="empty-card">
+            <IonCardContent>
+              <IonText>
+                <h2>📭 No hay personajes disponibles</h2>
+              </IonText>
+            </IonCardContent>
+          </IonCard>
+        )}
+
+        {/* List of Characters */}
+        {!loading && !error && messages.length > 0 && (
+          <IonList>
+            {messages.map(m => <MessageListItem key={m.id} message={m} />)}
+          </IonList>
+        )}
       </IonContent>
     </IonPage>
   );

@@ -1,6 +1,60 @@
+#view-message-page {
+  --background: #f5f5f5;
+}
+
+/* Encabezado con imagen */
+#view-message-page .character-header {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#view-message-page .large-avatar {
+  width: 150px;
+  height: 150px;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+#view-message-page .large-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Título del personaje */
+#view-message-page .character-title {
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin: 16px 0 8px 0;
+  color: #222;
+}
+
+/* Badge grande */
+#view-message-page .large-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 20px;
+}
+
+/* Fecha de creación */
+#view-message-page .created-date {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Item styling */
 #view-message-page ion-item {
   --inner-padding-end: 0;
   --background: transparent;
+  margin-bottom: 12px;
 }
 
 #view-message-page ion-label {
@@ -8,43 +62,46 @@
   margin-bottom: 12px;
 }
 
-#view-message-page ion-item h2 {
-  font-weight: 600;
-  
-  /**
-   * With larger font scales
-   * the date/time should wrap to the next
-   * line. However, there should be
-   * space between the name and the date/time
-   * if they can appear on the same line.
-   */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+#view-message-page ion-label p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-#view-message-page ion-item .date {
-  align-items: center;
-  display: flex;
+#view-message-page ion-label strong {
+  color: #222;
 }
 
-#view-message-page ion-item ion-icon {
-  font-size: 42px;
-  margin-right: 8px;
+/* Cards */
+#view-message-page ion-card {
+  margin: 12px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#view-message-page ion-item ion-note {
-  font-size: 0.9375rem;
-  margin-right: 12px;
-  font-weight: normal;
+#view-message-page ion-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #222;
 }
 
-#view-message-page h1 {
+#view-message-page ion-card p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Error card */
+#view-message-page .error-card {
+  margin: 16px;
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+#view-message-page .error-card h2 {
+  color: #c62828;
   margin: 0;
-  font-weight: bold;
-  font-size: 1.4rem;
-}
-
-#view-message-page p {
-  line-height: 1.4;
+  text-align: center;
 }
